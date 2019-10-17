@@ -12,3 +12,42 @@ class Department(models.Model):
 
     def __str__(self):
         return self.department_name
+
+
+class Project(models.Model):
+
+    department = models.ForeignKey(
+        'department.Department', on_delete=models.CASCADE)
+    project_name = models.CharField(max_length=255)
+    project_description = models.TextField()
+    is_upcoming = models.BooleanField()
+    is_ongoing = models.BooleanField()
+    is_completed = models.BooleanField()
+
+    def __str__(self):
+        return self.project_name
+
+
+class Scheme(models.Model):
+
+    department = models.ForeignKey(
+        'department.Department', on_delete=models.CASCADE)
+    scheme_name = models.CharField(max_length=255)
+    scheme_description = models.TextField()
+    is_upcoming = models.BooleanField()
+    is_ongoing = models.BooleanField()
+    is_completed = models.BooleanField()
+
+    def __str__(self):
+        return f'{self.scheme_name}--{self.department.department_name}'
+
+
+class File(models.Model):
+
+    file_name = models.CharField(max_length=255)
+    department = models.ForeignKey(
+        'department.Department', on_delete=models.CASCADE)
+    file = models.FileField(blank=False, null=False)
+
+    def __str__(self):
+        return f'{self.file_name}--{self.department.department_name}'

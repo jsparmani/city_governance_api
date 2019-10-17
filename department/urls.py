@@ -5,6 +5,8 @@ from . import views
 app_name = 'department'
 router = DefaultRouter()
 router.register('departments', views.DepartmentViewset)
+router.register('projects', views.ProjectViewset)
+router.register('schemes', views.SchemeViewset)
 
 urlpatterns = [
     path('', include(router.urls)),
