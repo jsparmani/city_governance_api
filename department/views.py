@@ -9,8 +9,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.core.mail import send_mail
 
-# Create your views here.
-
 
 class DepartmentViewset(viewsets.ModelViewSet):
     """Manage departments in the database"""
@@ -43,6 +41,14 @@ class SchemeViewset(viewsets.ModelViewSet):
 
     authentication_classes = (TokenAuthentication, )
 
+    def get_queryset(self):
+        department = self.request.query_params.get('department')
+
+        queryset = self.queryset
+        if department:
+            return queryset.filter(department=int(department))
+        return queryset
+
     def get_permissions(self):
         try:
             # return permission_classes depending on `action`
@@ -62,6 +68,14 @@ class ProjectViewset(viewsets.ModelViewSet):
                                     'create': [IsAuthenticated]}
 
     authentication_classes = (TokenAuthentication, )
+
+    def get_queryset(self):
+        department = self.request.query_params.get('department')
+
+        queryset = self.queryset
+        if department:
+            return queryset.filter(department=int(department))
+        return queryset
 
     def get_permissions(self):
         try:
@@ -150,3 +164,23 @@ class FilesViewset(mixins.RetrieveModelMixin,
 
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, )
+
+
+class BillPaymentViewset(viewsets.ModelViewSet):
+    """Manage Complaints in the database"""
+
+    serializer_class = serializers.BillPaymentSerializer
+    queryset = models.BillPayment.objects.all()
+
+    permission_classes_by_action = {'list': [IsAuthenticated],
+                                    'create': [IsAuthenticated]}
+
+    authentication_classes = (TokenAuthentication, )
+
+    def get_permissions(self):
+        try:
+            # return permission_classes depending on `action`
+            return [permission() for permission in self.permission_classes_by_action[self.action]]
+        except KeyError:
+            # action is not set return default permission_classes
+            return [permission() for permission in self.permission_classes]

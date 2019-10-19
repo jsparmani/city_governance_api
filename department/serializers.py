@@ -70,3 +70,20 @@ class ComplaintSerializer(serializers.ModelSerializer):
         fields = ('id', 'department', 'user',
                   'title', 'description', 'image')
         read_only_fields = ('id', )
+
+
+class BillPaymentSerializer(serializers.ModelSerializer):
+    """Serialize BillPayment model"""
+
+    department = serializers.PrimaryKeyRelatedField(
+        queryset=models.Department.objects.all()
+    )
+
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=get_user_model().objects.all())
+
+    class Meta:
+        model = models.BillPayment
+        fields = ('id', 'department', 'user', 'reg_no',
+                  'payment_id', 'payment_amt', 'time')
+        read_only_fields = ('id', 'time')

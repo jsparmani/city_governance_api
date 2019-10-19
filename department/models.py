@@ -63,3 +63,17 @@ class Complaint(models.Model):
 
     def __str__(self):
         return f'{self.department}--{self.user.username}'
+
+
+class BillPayment(models.Model):
+
+    department = models.ForeignKey(
+        'department.Department', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    reg_no = models.CharField(max_length=255)
+    payment_id = models.CharField(max_length=255)
+    payment_amt = models.CharField(max_length=255)
+    time = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.department}--{self.user}--{self.time}'
