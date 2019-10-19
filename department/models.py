@@ -58,6 +58,7 @@ class Complaint(models.Model):
         'department.Department', on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='complaint-images/', blank=True)
     description = models.TextField()
 
     def __str__(self):

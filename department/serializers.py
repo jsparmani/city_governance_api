@@ -63,8 +63,10 @@ class ComplaintSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(
         queryset=get_user_model().objects.all())
 
+    image = serializers.ImageField()
+
     class Meta:
         model = models.Complaint
         fields = ('id', 'department', 'user',
-                  'title', 'description')
+                  'title', 'description', 'image')
         read_only_fields = ('id', )

@@ -57,8 +57,8 @@ class CitizenUserViewset(viewsets.ModelViewSet):
 
     serializer_class = serializers.CitizenUserSerializer
     queryset = models.CitizenUser.objects.all()
-    permission_classes = (IsAuthenticated, )
-    authentication_classes = (TokenAuthentication, )
+    
+    
 
 
 @api_view(['POST'])
