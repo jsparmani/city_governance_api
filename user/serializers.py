@@ -2,6 +2,8 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
+from department.models import Department
+from . import models
 
 
 class AuthTokenSerializer(serializers.Serializer):
@@ -74,3 +76,31 @@ class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ('id', 'username', 'first_name', 'last_name', 'email')
+
+
+class DepartmentUserSerializer(serializers.ModelSerializer):
+    """Serialize department user"""
+
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=get_user_model().objects.all())
+
+    department = serializers.PrimaryKeyRelatedField(
+        queryset=Department.objects.all()
+    )
+
+    class Meta:
+        model = models.DepartmentUser
+        fields = ('id', 'user', 'department')
+        read_only_fields = ('id', )
+
+
+class CitizenUserSerializer(serializers.ModelSerializer):
+    """Serialize citizen user"""
+
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=get_user_model().objects.all())
+
+    class Meta:
+        model = models.CitizenUser
+        fields = ('id', 'user')
+        read_only_fields = ('id', )

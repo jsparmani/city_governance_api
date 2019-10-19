@@ -7,6 +7,7 @@ router = DefaultRouter()
 router.register('departments', views.DepartmentViewset)
 router.register('projects', views.ProjectViewset)
 router.register('schemes', views.SchemeViewset)
+router.register('complaints', views.ComplaintViewset)
 
 urlpatterns = [
     path('', include(router.urls)),

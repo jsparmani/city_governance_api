@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from . import models
+from django.contrib.auth import get_user_model
 
 
 class DepartmentSerializer(serializers.ModelSerializer):
@@ -49,4 +50,21 @@ class FileSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.File
         fields = ('id', 'file_name', 'department', 'file')
+        read_only_fields = ('id', )
+
+
+class ComplaintSerializer(serializers.ModelSerializer):
+    """Serialize Complaint model"""
+
+    department = serializers.PrimaryKeyRelatedField(
+        queryset=models.Department.objects.all()
+    )
+
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=get_user_model().objects.all())
+
+    class Meta:
+        model = models.Complaint
+        fields = ('id', 'department', 'user',
+                  'title', 'description')
         read_only_fields = ('id', )
