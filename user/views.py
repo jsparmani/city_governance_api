@@ -67,7 +67,7 @@ def check_user_status(request):
         try:
             user = Token.objects.get(key=request.data['token']).user
             if (user.is_superuser):
-                return Response({"type": "superuser"})
+                return Response({"type": "superuser", "id": user.id})
             else:
                 citizen_usernames = []
                 for u in models.CitizenUser.objects.all():
@@ -76,11 +76,11 @@ def check_user_status(request):
                 for u in models.DepartmentUser.objects.all():
                     department_usernames.append(u.user.username)
                 if user.username in citizen_usernames:
-                    return Response({"type": "citizen"})
+                    return Response({"type": "citizen", "id": user.id})
                 elif user.username in department_usernames:
                     dept = models.DepartmentUser.objects.get(
                         user__username__exact=user.username).department
-                    return Response({"type": "department", "department": dept.department_name, "department_id": dept.id})
+                    return Response({"type": "department", "department": dept.department_name, "department_id": dept.id, "id": user.id})
             return JsonResponse(request.data)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)

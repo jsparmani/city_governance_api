@@ -7,6 +7,9 @@ from rest_framework import viewsets, status
 from rest_framework.parsers import FileUploadParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.core.mail import send_mail
+
+
 # Create your views here.
 
 
@@ -96,3 +99,15 @@ class ComplaintViewset(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated, )
 
     authentication_classes = (TokenAuthentication, )
+
+    def create(self, request, *args, **kwargs):
+
+        send_mail(
+            'Complaint Filed',
+            'Here is the complaint',
+            'harhathkalam.ind@gmail.com',
+            ['jsparmani@gmail.com', 'iamprakharjindal@gmail.com'],
+            fail_silently=False,
+        )
+
+        return super().create(request, *args, **kwargs)
