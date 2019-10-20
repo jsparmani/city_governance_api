@@ -57,8 +57,6 @@ class CitizenUserViewset(viewsets.ModelViewSet):
 
     serializer_class = serializers.CitizenUserSerializer
     queryset = models.CitizenUser.objects.all()
-    
-    
 
 
 @api_view(['POST'])

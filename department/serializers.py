@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from . import models
 from django.contrib.auth import get_user_model
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 
 
 class DepartmentSerializer(serializers.ModelSerializer):
@@ -87,3 +89,26 @@ class BillPaymentSerializer(serializers.ModelSerializer):
         fields = ('id', 'department', 'user', 'reg_no',
                   'payment_id', 'payment_amt', 'time')
         read_only_fields = ('id', 'time')
+
+
+class ConnectionSerializer(serializers.ModelSerializer):
+    """Serialize Connection model"""
+
+    department = serializers.PrimaryKeyRelatedField(
+        queryset=models.Department.objects.all()
+    )
+
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=get_user_model().objects.all())
+
+    address_proof = serializers.FileField()
+
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
+
+
+    class Meta:
+        model = models.Connection
+        fields = ('id', 'department', 'user', 'name',
+                  'phone_no', 'address', 'address_proof')
+        read_only_fields = ('id',)

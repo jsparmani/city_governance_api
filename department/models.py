@@ -77,3 +77,17 @@ class BillPayment(models.Model):
 
     def __str__(self):
         return f'{self.department}--{self.user}--{self.time}'
+
+
+class Connection(models.Model):
+
+    department = models.ForeignKey(
+        'department.Department', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    phone_no = models.PositiveIntegerField()
+    address = models.TextField()
+    address_proof = models.FileField(upload_to='address-proofs/')
+
+    def __str__(self):
+        return f'{self.department}--{self.user}'

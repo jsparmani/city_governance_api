@@ -10,6 +10,7 @@ router.register('schemes', views.SchemeViewset)
 router.register('complaints', views.ComplaintViewset)
 router.register('downloads', views.FilesViewset)
 router.register('payments', views.BillPaymentViewset)
+router.register('connection-requests', views.ConnectionViewset)
 
 urlpatterns = [
     path('', include(router.urls)),

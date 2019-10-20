@@ -96,7 +96,7 @@ class FileUploadView(APIView):
 
         file_serializer = serializers.FileSerializer(data=request.data)
 
-        # print(request.data)
+        print(request.data)
 
         if file_serializer.is_valid():
             file_serializer.save()
@@ -137,12 +137,12 @@ class ComplaintViewset(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
 
-        print(request.data)
+        # print(request.data['department'])
 
         complaint = super().create(request, *args, **kwargs)
 
         ''' send_mail(
-            'Complaint Filed',
+            f'Complaint Filed for {} ',
             'Here is the complaint',
             'harhathkalam.ind@gmail.com',
             ['jsparmani@gmail.com', 'iamprakharjindal@gmail.com'],
@@ -165,9 +165,17 @@ class FilesViewset(mixins.RetrieveModelMixin,
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, )
 
+    def get_queryset(self):
+        department = self.request.query_params.get('department')
+
+        queryset = self.queryset
+        if department:
+            return queryset.filter(department=int(department))
+        return queryset
+
 
 class BillPaymentViewset(viewsets.ModelViewSet):
-    """Manage Complaints in the database"""
+    """Manage BillPayments in the database"""
 
     serializer_class = serializers.BillPaymentSerializer
     queryset = models.BillPayment.objects.all()
@@ -184,3 +192,25 @@ class BillPaymentViewset(viewsets.ModelViewSet):
         except KeyError:
             # action is not set return default permission_classes
             return [permission() for permission in self.permission_classes]
+
+
+class ConnectionViewset(viewsets.ModelViewSet):
+    """Manage Connections in the database"""
+
+    serializer_class = serializers.ConnectionSerializer
+    queryset = models.Connection.objects.all()
+
+    permission_classes = (IsAuthenticated, )
+
+    authentication_classes = (TokenAuthentication, )
+
+    def get_queryset(self):
+        user = self.request.query_params.get('user')
+        department = self.request.query_params.get('department')
+
+        queryset = self.queryset
+        if user:
+            return queryset.filter(user=int(user))
+        if department:
+            return queryset.filter(department=int(department))
+        return queryset
